@@ -70,6 +70,15 @@ android {
     }
     testBuildType = (findProperty("strata.testBuildType") as String?) ?: "debug"
 
+    splits {
+        abi {
+            isEnable = providers.gradleProperty("strata.splitApks").map { it.toBoolean() }.getOrElse(false)
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86_64")
+            isUniversalApk = true
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
