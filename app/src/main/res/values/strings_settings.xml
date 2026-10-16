@@ -337,6 +337,8 @@
     <string name="settings_credit_ftpserver">Apache FtpServer and MINA</string>
     <string name="settings_credit_pdfium">PDFium (pdfium-binaries build)</string>
     <string name="settings_license_pdfium">BSD-3-Clause and Apache-2.0; its FreeType, HarfBuzz, ICU, libjpeg-turbo, OpenJPEG, Little CMS, libpng and zlib keep their own licenses</string>
+    <string name="settings_credit_sounds">Interface sounds and illustrations</string>
+    <string name="settings_credit_sounds_license">Made with ElevenLabs (elevenlabs.io)</string>
     <string name="settings_toolbar_subtitle">Long-press a row and drag it</string>
     <string name="settings_tab_bottom_bar">Bottom bar</string>
     <string name="settings_tab_selection">Selection</string>
