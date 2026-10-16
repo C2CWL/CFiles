@@ -86,4 +86,5 @@
 -keep interface rikka.shizuku.** { *; }
 -dontwarn rikka.shizuku.**
 
--keepclassmembers enum * { *; }
+-dontoptimize
+-keep class com.android.tools.r8.** { *; }
