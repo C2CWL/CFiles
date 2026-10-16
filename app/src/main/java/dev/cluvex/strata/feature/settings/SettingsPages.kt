@@ -617,7 +617,6 @@ private fun components(): List<Pair<String, String>> = listOf(
     "Shizuku API" to "MIT",
     "Multiplatform Markdown Renderer" to "Apache-2.0",
     tr(R.string.settings_credit_pdfium) to tr(R.string.settings_license_pdfium),
-    tr(R.string.settings_credit_sounds) to tr(R.string.settings_credit_sounds_license),
 )
 
 @Composable

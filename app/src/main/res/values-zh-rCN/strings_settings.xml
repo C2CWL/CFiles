@@ -336,8 +336,6 @@
     <string name="settings_credit_ftpserver">Apache FtpServer 和 MINA</string>
     <string name="settings_credit_pdfium">PDFium（pdfium-binaries 构建）</string>
     <string name="settings_license_pdfium">BSD-3-Clause 和 Apache-2.0；其中包含的 FreeType、HarfBuzz、ICU、libjpeg-turbo、OpenJPEG、Little CMS、libpng 和 zlib 保留各自的许可证</string>
-    <string name="settings_credit_sounds">界面音效和插图</string>
-    <string name="settings_credit_sounds_license">使用 ElevenLabs 制作（elevenlabs.io）</string>
     <string name="settings_toolbar_subtitle">长按某一行并拖动</string>
     <string name="settings_tab_bottom_bar">底部栏</string>
     <string name="settings_tab_selection">选择</string>

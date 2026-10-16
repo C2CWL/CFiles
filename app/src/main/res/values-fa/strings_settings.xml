@@ -336,8 +336,6 @@
     <string name="settings_credit_ftpserver">\u200FApache FtpServer و MINA</string>
     <string name="settings_credit_pdfium">\u200FPDFium (ساخت pdfium-binaries)</string>
     <string name="settings_license_pdfium">\u200FBSD-3-Clause و Apache-2.0؛ کتابخانه‌های همراه آن (FreeType، HarfBuzz، ICU، libjpeg-turbo، OpenJPEG، Little CMS، libpng و zlib) مجوز خودشان را دارند</string>
-    <string name="settings_credit_sounds">صداها و تصویرسازی‌های رابط کاربری</string>
-    <string name="settings_credit_sounds_license">ساخته‌شده با ElevenLabs (elevenlabs.io)</string>
     <string name="settings_toolbar_subtitle">روی یک ردیف لمس طولانی کنید و آن را بکشید</string>
     <string name="settings_tab_bottom_bar">نوار پایین</string>
     <string name="settings_tab_selection">انتخاب</string>
