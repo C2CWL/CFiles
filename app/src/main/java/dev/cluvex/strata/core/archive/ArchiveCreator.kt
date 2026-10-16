@@ -221,7 +221,7 @@ object ArchiveCreator {
                 ArchiveFormat.TAR_GZ -> GzipCompressorOutputStream(raw, GzipParameters().apply { compressionLevel = deflateLevel(o.level) })
                 ArchiveFormat.TAR_BZ2 -> BZip2CompressorOutputStream(raw, bzip2BlockSize(o.level))
                 ArchiveFormat.TAR_XZ -> XZOutputStream(raw, lzma2Options(o.level))
-                ArchiveFormat.TAR_ZST -> ZstdCompressorOutputStream(raw, zstdLevel(o.level))
+                ArchiveFormat.TAR_ZST -> ZstdCompressorOutputStream.builder().setOutputStream(raw).setLevel(zstdLevel(o.level)).get()
                 else -> raw
             }
         } catch (e: Throwable) {

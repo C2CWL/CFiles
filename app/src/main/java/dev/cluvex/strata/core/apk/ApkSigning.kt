@@ -1,6 +1,7 @@
 package dev.cluvex.strata.core.apk
 
 import com.android.apksig.ApkSigner
+import com.android.apksig.KeyConfig
 import dev.cluvex.strata.R
 import dev.cluvex.strata.core.build.BuildListener
 import dev.cluvex.strata.core.build.BuildRun
@@ -40,7 +41,7 @@ object ApkSigning {
         }
         log.info("Schemes " + listOfNotNull("v1".takeIf { options.v1 }, "v2".takeIf { options.v2 }, "v3".takeIf { options.v3 }, "v4".takeIf { options.v4 }).joinToString(" + ") + " · 4-byte aligned")
 
-        val signerConfig = ApkSigner.SignerConfig.Builder("CERT", key.privateKey, key.certificates).build()
+        val signerConfig = ApkSigner.SignerConfig.Builder("CERT", KeyConfig.Jca(key.privateKey), key.certificates).build()
         val builder = ApkSigner.Builder(listOf(signerConfig))
             .setInputApk(input)
             .setOutputApk(output)

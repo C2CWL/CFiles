@@ -189,7 +189,7 @@ object ApkCloner {
         val root = manifest.manifestElement ?: return 0
         var changed = 0
         for (tag in PERMISSION_TAGS) {
-            for (el in root.listElements(tag)) {
+            for (el in root.getElements(tag).asSequence().toList()) {
                 val attr = el.searchAttributeByResourceId(ID_NAME) ?: continue
                 val value = attr.valueAsString ?: continue
                 val renamed = replacePackagePrefix(value, oldPkg, newPkg)

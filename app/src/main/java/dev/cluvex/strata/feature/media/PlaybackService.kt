@@ -56,13 +56,13 @@ class PlaybackService : MediaSessionService() {
         @OptIn(UnstableApi::class)
         override fun onConnect(session: MediaSession, controller: MediaSession.ControllerInfo): MediaSession.ConnectionResult {
             if (controller.packageName == packageName || controller.isTrusted) {
-                return MediaSession.ConnectionResult.AcceptedResultBuilder(session).build()
+                return MediaSession.ConnectionResult.AcceptedResultBuilder(session, controller).build()
             }
             val commands = MediaSession.ConnectionResult.DEFAULT_PLAYER_COMMANDS.buildUpon()
                 .remove(Player.COMMAND_SET_MEDIA_ITEM)
                 .remove(Player.COMMAND_CHANGE_MEDIA_ITEMS)
                 .build()
-            return MediaSession.ConnectionResult.AcceptedResultBuilder(session).setAvailablePlayerCommands(commands).build()
+            return MediaSession.ConnectionResult.AcceptedResultBuilder(session, controller).setAvailablePlayerCommands(commands).build()
         }
     }
 }
