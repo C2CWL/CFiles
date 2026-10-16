@@ -86,7 +86,7 @@
     <string name="apk_sign_keystore">فایل مخزن کلید</string>
     <string name="apk_sign_quick_body">با کلیدی که Strata نگه می‌دارد امضا می‌کند، بدون نام یا رمز عبور. همین کلید دوباره به کار می‌رود، پس به‌روزرسانی‌های یک برنامه امضای یکسانی خواهند داشت.</string>
     <string name="apk_sign_no_saved">هنوز کلیدی ذخیره نشده است. برای وارد کردن، روی یک فایل \u200E.jks / .keystore / .p12 / .bks (یا \u200E.pk8) بزنید، یا در «کلیدهای امضا» کلیدی بسازید.</string>
-    <string name="apk_sign_save_jks">فایل \u2068%1$s\u2069.jks هم کنار APK ذخیره شود</string>
+    <string name="apk_sign_save_jks">فایل \u2068%1$s\u200E.jks\u2069 هم کنار APK ذخیره شود</string>
     <string name="apk_sign_custom_body">کلید جدیدی با مشخصات شما ساخته و در «کلیدهای امضا» نگه داشته می‌شود تا بتوانید به‌روزرسانی‌ها را با همان امضا دوباره امضا کنید. فایل \u200E.jks (محافظت‌شده با همین رمز عبور) مال شماست و روی رایانه هم می‌توانید با آن امضا کنید.</string>
     <string name="apk_sign_keystore_path">مسیر مخزن کلید (\u200E.jks/.keystore/.p12/.bks)</string>
     <string name="apk_sign_store_password">رمز مخزن</string>
@@ -208,9 +208,9 @@
     <string name="keys_renamed">نام به «\u2068%1$s\u2069» تغییر کرد</string>
     <string name="keys_deleted">حذف شد</string>
     <string name="keys_saved_file">\u200F\u2068%1$s\u2069 ذخیره شد</string>
-    <string name="keys_saved_pk8">\u200F\u2068%1$s\u2069.pk8 و \u2068%1$s\u2069.x509.pem ذخیره شدند</string>
+    <string name="keys_saved_pk8">\u200F\u2068%1$s\u200E.pk8\u2069 و \u2068%1$s\u200E.x509.pem\u2069 ذخیره شدند</string>
     <string name="keys_read_failed">خواندن فایل ممکن نشد: \u2068%1$s\u2069\u200E</string>
-    <string name="keys_pk8_pair_missing">\u200F\u2068%1$s\u2069.pk8 و \u200E.x509.pem باید کنار هم باشند</string>
+    <string name="keys_pk8_pair_missing">\u200F\u2068%1$s\u200E.pk8\u2069 و \u200E.x509.pem باید کنار هم باشند</string>
     <string name="keys_imported">کلید «\u2068%1$s\u2069» به «کلیدهای امضا» وارد شد</string>
     <string name="keys_import_title">وارد کردن کلید امضا</string>
     <string name="keys_no_certificate">بدون گواهی</string>

@@ -80,7 +80,7 @@
     <string name="open_looking">در حال یافتن برنامه‌ها…</string>
     <string name="open_no_app">هیچ برنامه‌ای این نوع را باز نمی‌کند؛ از بالا نوع دیگری را برای باز کردن امتحان کنید.</string>
     <string name="open_default_hint">برای اینکه این فایل‌ها همیشه این‌طور باز شوند، لمس طولانی کنید</string>
-    <string name="open_default_hint_ext">برای اینکه فایل‌های \u200E.\u2068%1$s\u2069 همیشه این‌طور باز شوند، لمس طولانی کنید</string>
+    <string name="open_default_hint_ext">برای اینکه فایل‌های \u2068.\u200E%1$s\u2069 همیشه این‌طور باز شوند، لمس طولانی کنید</string>
     <string name="files_name_taken">فایلی با این نام از قبل وجود دارد</string>
     <string name="files_link_invalid_target">مقصد پیوند نامعتبر است</string>
     <string name="files_link_failed">ساخت پیوند ممکن نشد</string>

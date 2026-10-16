@@ -147,7 +147,7 @@
     <string name="explorer_level">سطح فشرده‌سازی</string>
     <string name="explorer_archive_no_password">آرشیوهای \u2068%1$s\u2069 نمی‌توانند رمز عبور داشته باشند</string>
     <string name="explorer_archive_no_encryption">برای رمزگذاری نکردن، خالی بگذارید</string>
-    <string name="explorer_archive_zip_aes">\u200FAES-256 (در 7-Zip، WinRAR و… باز می‌شود)</string>
+    <string name="explorer_archive_zip_aes">\u200FAES-256 (در \u20687-Zip\u2069، WinRAR و… باز می‌شود)</string>
     <string name="explorer_encrypt_names">نام فایل‌ها هم رمزگذاری شود</string>
     <string name="explorer_compress_each">فشرده‌سازی جداگانه هر فایل/پوشه</string>
     <string name="explorer_compress">فشرده‌سازی</string>
@@ -188,7 +188,7 @@
     <string name="explorer_move_part_down">انتقال \u2068%1$s\u2069 به پایین</string>
     <string name="explorer_output_file">فایل خروجی</string>
     <string name="explorer_merge">ادغام</string>
-    <string name="explorer_rename_help">\u200F{P} نام بدون پسوند (abc در abc.txt)، {S} پسوند (.txt)\n\u200F{N} عددی که از N شروع می‌شود و بالا می‌رود، مثلاً {1}، {0}\n\u200F{zN} همان، با صفرهای پیشرو: {z8} می‌شود 08، 09، 10، 11، {z001} می‌شود 001…\n\u200F{T} زمان تغییر، {E} زمان عکس (EXIF) — با الگوی تاریخ قالب‌بندی می‌شوند\n\u200F{AN} {AP} {AV} {AC} نام APK، بسته، نام نسخه، کد نسخه\nبرای جایگزینی کل نام، «متن مورد جستجو» را خالی بگذارید.</string>
+    <string name="explorer_rename_help">\u200F{P} نام بدون پسوند (abc در abc.txt)، {S} پسوند (\u200E.txt)\n\u200F{N} عددی که از N شروع می‌شود و بالا می‌رود، مثلاً {1}، {0}\n\u200F{zN} همان، با صفرهای پیشرو: {z8} می‌شود 08، 09، 10، 11، {z001} می‌شود 001…\n\u200F{T} زمان تغییر، {E} زمان عکس (EXIF) — با الگوی تاریخ قالب‌بندی می‌شوند\n\u200F{AN} {AP} {AV} {AC} نام APK، بسته، نام نسخه، کد نسخه\nبرای جایگزینی کل نام، «متن مورد جستجو» را خالی بگذارید.</string>
     <string name="explorer_batch_rename">تغییر نام گروهی</string>
     <string name="explorer_history">تاریخچه</string>
     <string name="explorer_text_to_find">متن مورد جستجو</string>

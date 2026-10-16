@@ -165,7 +165,7 @@
     <string name="model_opener_markdown">پیش‌نمایش مارک‌داون</string>
     <string name="model_opener_pdf">پی‌دی‌اف‌خوان</string>
     <string name="model_opener_image">نمایشگر تصویر</string>
-    <string name="model_opener_nine_patch">ویرایشگر 9-patch</string>
+    <string name="model_opener_nine_patch">ویرایشگر \u20689-patch\u2069</string>
     <string name="model_opener_signing_key">وارد کردن کلید امضا</string>
     <string name="model_opener_music">پخش‌کننده موسیقی</string>
     <string name="model_opener_video">پخش‌کننده ویدیو</string>

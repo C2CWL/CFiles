@@ -387,7 +387,7 @@
     <string name="drawer_free_of">\u200F\u2068%1$s\u2069 آزاد از \u2068%2$s\u2069</string>
     <string name="ui_open_in_app_failed">در آن برنامه باز نشد</string>
     <string name="ui_default_no_extension">به‌عنوان پیش‌فرض فایل‌های بدون پسوند تنظیم شد</string>
-    <string name="ui_default_for_ext">به‌عنوان پیش‌فرض فایل‌های \u200E.\u2068%1$s\u2069 تنظیم شد</string>
+    <string name="ui_default_for_ext">به‌عنوان پیش‌فرض فایل‌های \u2068.\u200E%1$s\u2069 تنظیم شد</string>
     <string name="ui_storage_title">دسترسی به حافظه لازم است</string>
     <string name="ui_storage_body">\u200FStrata برای مرور، ویرایش و مدیریت حافظه دستگاه به دسترسی به همه فایل‌ها نیاز دارد.</string>
     <string name="ui_storage_grant">اعطای دسترسی</string>
