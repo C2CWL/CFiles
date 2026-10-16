@@ -11,6 +11,7 @@ import dev.cluvex.strata.core.vault.VaultLockedException
 import dev.cluvex.strata.core.vault.VaultStore
 import dev.cluvex.strata.core.vault.VaultTransfers
 import android.app.Application
+import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -53,6 +54,8 @@ import dev.cluvex.strata.core.model.ConflictChoice
 import dev.cluvex.strata.core.model.FileItem
 import dev.cluvex.strata.core.pdf.PdfMerger
 import dev.cluvex.strata.core.model.SortOrder
+import dev.cluvex.strata.core.open.IncomingFiles
+import dev.cluvex.strata.core.open.IncomingPaths
 import dev.cluvex.strata.core.plugin.PluginFiles
 import dev.cluvex.strata.core.remote.Place
 import dev.cluvex.strata.core.remote.RemoteConnection
@@ -81,6 +84,8 @@ import java.io.InputStream
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -90,6 +95,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -991,6 +997,65 @@ class ExplorerViewModel(
     fun showInFolder(pane: Pane, folder: String, reveal: String? = null) {
         setActive(pane)
         navigate(pane, folder, reveal = listOfNotNull(reveal))
+    }
+
+    fun locateIncoming(uri: Uri) = viewModelScope.launch {
+        val app = getApplication<Application>()
+        val pane = _state.value.active
+        val path = withContext(Dispatchers.IO) { IncomingFiles.locate(app, uri) }
+        val kind = if (path == null) PathKind.MISSING else kindOf(path)
+        when {
+            path != null && kind == PathKind.FILE -> showInFolder(pane, File(path).parent ?: "/", path)
+            path != null && kind == PathKind.FOLDER -> showInFolder(pane, path)
+            else -> {
+                val name = withContext(Dispatchers.IO) { IncomingPaths.safeName(IncomingFiles.displayName(app, uri)) }
+                _state.update { it.copy(incoming = IncomingCopy(uri.toString(), name, (it.incoming?.seq ?: 0) + 1)) }
+            }
+        }
+    }
+
+    fun consumeIncoming(seq: Int) = _state.update { if (it.incoming?.seq == seq) it.copy(incoming = null) else it }
+
+    fun saveIncomingCopy(copy: IncomingCopy) {
+        consumeIncoming(copy.seq)
+        val app = getApplication<Application>()
+        val uri = Uri.parse(copy.uri)
+        val dir = File(rootPath, Environment.DIRECTORY_DOWNLOADS).path
+        runTask(tr(R.string.explorer_task_saving), work = {
+            flow {
+                val to = access(dir, write = true, viaRoot = false)
+                val target = FsUtil.uniqueSibling(to.child(to.file(dir), copy.name), false, to)
+                val total = IncomingFiles.size(app, uri)
+                val input = app.contentResolver.openInputStream(uri) ?: throw IOException(tr(R.string.explorer_incoming_unreadable))
+                try {
+                    input.use { i ->
+                        to.openOutput(target).use { o ->
+                            val buffer = ByteArray(256 * 1024)
+                            var done = 0L
+                            var shown = 0L
+                            while (true) {
+                                currentCoroutineContext().ensureActive()
+                                val n = i.read(buffer)
+                                if (n < 0) break
+                                o.write(buffer, 0, n)
+                                done += n
+                                val now = System.nanoTime()
+                                if (now - shown > 100_000_000L) {
+                                    shown = now
+                                    emit(OpProgress.Running(copy.name, done, total, 0, if (total > 0) 1 else 0))
+                                }
+                            }
+                        }
+                    }
+                } catch (e: Throwable) {
+                    runCatching { target.delete() }
+                    throw e
+                }
+                emit(OpProgress.Finished(okCount = 1, failed = emptyList(), created = listOf(target.path)))
+            }.flowOn(Dispatchers.IO)
+        }, sound = UiSound.LAND) { done ->
+            done.created.firstOrNull()?.let { showInFolder(_state.value.active, dir, it) }
+        }
     }
 
     private enum class PathKind { FOLDER, FILE, MISSING }

@@ -2,6 +2,7 @@ package dev.cluvex.strata
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -59,6 +60,11 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    private fun incomingFile(intent: Intent?): Uri? {
+        if (intent?.action != Intent.ACTION_VIEW) return null
+        return intent.data?.takeIf { it.scheme == "file" || it.scheme == "content" }
+    }
+
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(AppLocales.wrap(newBase))
     }
@@ -94,6 +100,7 @@ class MainActivity : FragmentActivity() {
         UiSounds.enabled = initial.appearance.sounds
         UiSounds.inSilent = initial.appearance.soundsInSilent
         val incoming = incomingPdf(intent)
+        val incomingFile = if (incoming == null && savedInstanceState == null) incomingFile(intent) else null
         setContent {
             val settings by settingsFlow.collectAsStateWithLifecycle(initialValue = initial)
             val sounds = settings.appearance.sounds
@@ -121,6 +128,7 @@ class MainActivity : FragmentActivity() {
                                 startPath = startPath,
                                 startPathOther = startPath2,
                                 incoming = incoming,
+                                incomingFile = incomingFile,
                                 onIncomingDone = { finish() },
                             )
                         }

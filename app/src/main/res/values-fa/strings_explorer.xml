@@ -241,4 +241,7 @@
     <string name="explorer_drop_on_folder">روی یک پوشه رها کنید</string>
     <string name="explorer_up_one_folder">یک پوشه بالاتر</string>
     <string name="explorer_drop_into">به داخل \u2068%1$s\u2069</string>
+    <string name="explorer_incoming_hidden">\u200FStrata محل ذخیره‌ی \u2068%1$s\u2069 را نمی‌بیند</string>
+    <string name="explorer_incoming_save">ذخیره در Download</string>
+    <string name="explorer_incoming_unreadable">برنامه‌ی دیگر اجازه‌ی خواندن این فایل را نداد</string>
 </resources>

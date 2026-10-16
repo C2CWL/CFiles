@@ -83,6 +83,8 @@ data class DropRequest(val pane: Pane, val items: List<FileItem>, val destinatio
 
 data class MoveUndo(val message: String, val moved: List<String>, val backTo: String, val seq: Int)
 
+data class IncomingCopy(val uri: String, val name: String, val seq: Int)
+
 data class TaskState(
     val title: String,
     val detail: String = "",
@@ -123,6 +125,7 @@ data class ExplorerUiState(
     val remoteEdits: List<RemoteEdit> = emptyList(),
     val storagePrompt: StoragePrompt? = null,
     val undo: MoveUndo? = null,
+    val incoming: IncomingCopy? = null,
 ) {
     fun isRemote(pane: Pane): Boolean = RemoteUri.isRemote(pane(pane).path)
 

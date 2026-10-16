@@ -251,6 +251,17 @@ fun ExplorerScreen(
         if (result == SnackbarResult.ActionPerformed) vm.undoMove(u) else vm.consumeUndo(u.seq)
     }
 
+    LaunchedEffect(ui.incoming?.seq) {
+        val c = ui.incoming ?: return@LaunchedEffect
+        val result = (appSnackbar ?: snackbar).showSnackbar(
+            tr(R.string.explorer_incoming_hidden, c.name),
+            actionLabel = tr(R.string.explorer_incoming_save),
+            withDismissAction = true,
+            duration = SnackbarDuration.Long,
+        )
+        if (result == SnackbarResult.ActionPerformed) vm.saveIncomingCopy(c) else vm.consumeIncoming(c.seq)
+    }
+
     Box(
         Modifier
             .fillMaxSize()

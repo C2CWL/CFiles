@@ -1,6 +1,7 @@
 package dev.cluvex.strata.ui
 
 import android.app.Application
+import android.net.Uri
 import android.os.Environment
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
@@ -187,6 +188,7 @@ fun AppShell(
     startPath: String? = null,
     startPathOther: String? = null,
     incoming: ReaderSource? = null,
+    incomingFile: Uri? = null,
     onIncomingDone: () -> Unit = {},
 ) {
     val access = rememberStorageAccessState()
@@ -230,6 +232,10 @@ fun AppShell(
     LaunchedEffect(startPath, startPathOther) {
         startPath?.let { vm.openPath(vm.state.value.active, it) }
         startPathOther?.let { vm.openPath(vm.state.value.inactive, it) }
+    }
+
+    LaunchedEffect(incomingFile) {
+        incomingFile?.let { vm.locateIncoming(it) }
     }
 
     LaunchedEffect(route) {
