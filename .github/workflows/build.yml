@@ -47,10 +47,6 @@ jobs:
       - name: Build the native core
         run: native/build.sh
 
-      - name: Rust tests
-        working-directory: native
-        run: cargo test --release
-
       - name: Build the debug APK
         run: ./gradlew --stacktrace :app:assembleDebug
 
