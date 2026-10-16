@@ -3,6 +3,7 @@ name: Release
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -10,21 +11,27 @@ permissions:
 jobs:
   release:
     name: Signed release APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic
 
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: native
 
       - name: Install cargo-ndk
         run: cargo install cargo-ndk --locked
@@ -52,19 +59,32 @@ jobs:
       - name: Build the release APK
         run: ./gradlew --stacktrace :app:assembleRelease
 
+      - name: Rename the APK
+        run: |
+          name="Strata-${GITHUB_REF_NAME//\//-}.apk"
+          cp app/build/outputs/apk/release/app-release.apk "$name"
+          echo "APK_NAME=$name" >> "$GITHUB_ENV"
+
       - name: Keep the R8 mapping
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: mapping-${{ github.ref_name }}
+          name: mapping-${{ github.run_number }}
           path: app/build/outputs/mapping/release/mapping.txt
           retention-days: 90
 
+      - name: Keep the signed APK
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v7
+        with:
+          name: strata-release
+          path: ${{ env.APK_NAME }}
+          retention-days: 7
+
       - name: Publish the release
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          cp app/build/outputs/apk/release/app-release.apk "Strata-${GITHUB_REF_NAME}.apk"
-          gh release create "$GITHUB_REF_NAME" "Strata-${GITHUB_REF_NAME}.apk" --title "Strata ${GITHUB_REF_NAME}" --generate-notes
+        run: gh release create "$GITHUB_REF_NAME" "$APK_NAME" --title "Strata ${GITHUB_REF_NAME}" --generate-notes
 
       - name: Remove the signing key
         if: always()
