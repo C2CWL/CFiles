@@ -28,12 +28,10 @@ You need the Android SDK with an NDK, and Rust with the Android targets and `car
 ```bash
 rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android
 cargo install cargo-ndk
-tools/pdfium/fetch.sh
+native/fetch-pdfium.sh
 native/build.sh
 ./gradlew :app:assembleDebug
 ```
-
-Tests: `./gradlew :app:testDebugUnitTest`, `(cd native && cargo test --release)` and, with a phone connected, `./gradlew :app:connectedDebugAndroidTest`.
 
 ## Support the developer
 
