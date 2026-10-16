@@ -98,6 +98,7 @@ android {
     packaging {
         jniLibs {
             useLegacyPackaging = true
+            keepDebugSymbols += "**/*.so"
         }
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -109,6 +110,8 @@ android {
             excludes += "/META-INF/services/javax.annotation.processing.Processor"
             pickFirsts += "/META-INF/versions/9/module-info.class"
             merges += "/META-INF/services/**"
+            excludes += "/META-INF/services/java.net.spi.InetAddressResolverProvider"
+            excludes += "/META-INF/services/sun.net.spi.nameservice.NameServiceDescriptor"
             excludes += "/resources/api_database.ser"
             excludes += "/LICENSE"
         }
@@ -117,10 +120,13 @@ android {
 
 kotlin {
     jvmToolchain(17)
+    compilerOptions {
+        freeCompilerArgs.add("-Xannotation-default-target=param-property")
+    }
 }
 
 val nativeDir: File = rootProject.file("native")
-val cargoHostBuild by tasks.registering(Exec::class) {
+val cargoHostBuild = tasks.register<Exec>("cargoHostBuild") {
     description = "Builds native/ for the host machine (used by JVM unit tests)."
     group = "build"
     workingDir = nativeDir
