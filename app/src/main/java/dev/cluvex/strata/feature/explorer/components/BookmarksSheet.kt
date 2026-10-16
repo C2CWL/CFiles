@@ -193,7 +193,7 @@ private fun BookmarkRow(
     var menu by remember { mutableStateOf(false) }
     val description = stringResource(R.string.explorer_bookmark_cd, bookmark.name)
     ListItem(
-        headlineContent = { Text(bookmark.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        content = { Text(bookmark.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
         supportingContent = {
             Text(bookmark.path, maxLines = 1, overflow = TextOverflow.Ellipsis, fontFamily = FontFamily.Monospace, style = MaterialTheme.typography.bodySmall.asPath())
         },

@@ -24,15 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import dev.cluvex.strata.R
 import dev.cluvex.strata.core.donate.Donation
 import dev.cluvex.strata.ui.asPath
+import dev.cluvex.strata.ui.rememberTextClipboard
 import kotlinx.coroutines.launch
 
 @Composable
@@ -59,7 +58,7 @@ fun SupportCard(onOpen: () -> Unit) {
 
 @Composable
 fun SupportPage(onBack: () -> Unit) {
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val copied = stringResource(R.string.settings_support_copied)
@@ -83,7 +82,7 @@ fun SupportPage(onBack: () -> Unit) {
                         }
                         IconButton(
                             onClick = {
-                                clipboard.setText(AnnotatedString(wallet.address))
+                                clipboard.setText(wallet.address)
                                 scope.launch { snackbar.showSnackbar(copied) }
                             },
                             modifier = Modifier.testTag("copy-${wallet.id}"),

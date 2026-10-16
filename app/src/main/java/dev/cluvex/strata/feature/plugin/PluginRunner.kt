@@ -35,10 +35,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,6 +46,7 @@ import dev.cluvex.strata.R
 import dev.cluvex.strata.core.plugin.PluginInfo
 import dev.cluvex.strata.core.plugin.PluginTrust
 import dev.cluvex.strata.core.util.Formatters
+import dev.cluvex.strata.ui.rememberTextClipboard
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -66,7 +65,7 @@ fun PluginRunner(vm: PluginRunViewModel, onSave: (PluginStep.Ready, replace: Boo
             vm.launchFailed(e)
         }
     }
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
 
     when (val s = step) {
         PluginStep.Idle -> Unit
@@ -123,9 +122,9 @@ fun PluginRunner(vm: PluginRunViewModel, onSave: (PluginStep.Ready, replace: Boo
             title = { Text(s.plugin.label) },
             text = { SelectionContainer { Text(s.message, modifier = Modifier.verticalScroll(rememberScrollState()).testTag("plugin-message")) } },
             confirmButton = { TextButton(onClick = vm::dismiss) { Text(stringResource(R.string.common_close)) } },
-            dismissButton = { TextButton(onClick = { clipboard.setText(AnnotatedString(s.message)) }) { Text(stringResource(R.string.common_copy)) } },
+            dismissButton = { TextButton(onClick = { clipboard.setText(s.message) }) { Text(stringResource(R.string.common_copy)) } },
         )
-        is PluginStep.Ready -> ReadyDialog(s, vm, onSave, onCopy = { clipboard.setText(AnnotatedString(it)) })
+        is PluginStep.Ready -> ReadyDialog(s, vm, onSave, onCopy = { clipboard.setText(it) })
         is PluginStep.Failed -> AlertDialog(
             onDismissRequest = vm::dismiss,
             title = { Text(stringResource(R.string.plugin_plugin)) },

@@ -61,11 +61,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -86,6 +84,7 @@ import dev.cluvex.strata.core.util.Formatters
 import dev.cluvex.strata.ui.expressive.ArtTone
 import dev.cluvex.strata.ui.expressive.ExpressiveDialog
 import dev.cluvex.strata.ui.expressive.HeroShapes
+import dev.cluvex.strata.ui.rememberTextClipboard
 import java.io.File
 
 data class ApkDialogActions(
@@ -317,11 +316,11 @@ private fun Label(text: String) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun Field(label: String, value: String, mono: Boolean = false, copy: Boolean = false, highlight: Boolean = false) {
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     Row(
         Modifier
             .fillMaxWidth()
-            .then(if (copy) Modifier.combinedClickable(onClick = {}, onLongClick = { clipboard.setText(AnnotatedString(value)) }) else Modifier)
+            .then(if (copy) Modifier.combinedClickable(onClick = {}, onLongClick = { clipboard.setText(value) }) else Modifier)
             .padding(vertical = 3.dp),
     ) {
         Label(label)
@@ -338,12 +337,12 @@ private fun Field(label: String, value: String, mono: Boolean = false, copy: Boo
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PathField(label: String, path: String, onOpen: () -> Unit) {
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     Row(
         Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .combinedClickable(onClick = onOpen, onLongClick = { clipboard.setText(AnnotatedString(path)) })
+            .combinedClickable(onClick = onOpen, onLongClick = { clipboard.setText(path) })
             .padding(vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -64,7 +64,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -96,6 +95,7 @@ import dev.cluvex.strata.feature.color.ColorPickerDialog
 import dev.cluvex.strata.ui.expressive.ArtTone
 import dev.cluvex.strata.ui.expressive.ExpressiveDialog
 import dev.cluvex.strata.ui.expressive.HeroShapes
+import dev.cluvex.strata.ui.rememberSheetState
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
@@ -187,7 +187,7 @@ fun ArscEditorScreen(
     }
 
     s.sheet?.let { res ->
-        ModalBottomSheet(onDismissRequest = { vm.openSheet(null) }, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+        ModalBottomSheet(onDismissRequest = { vm.openSheet(null) }, sheetState = rememberSheetState()) {
             ValuesSheet(res) { value -> editing = res to value }
         }
     }
@@ -251,7 +251,7 @@ private fun TypeList(types: List<dev.cluvex.strata.core.res.ArscTypeCount>, onOp
         items(types, key = { it.type }) { t ->
             ListItem(
                 leadingContent = { Icon(iconFor(t.type), contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-                headlineContent = { Text(t.type) },
+                content = { Text(t.type) },
                 trailingContent = { Text("${t.count}", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant) },
                 modifier = Modifier.clickable { onOpen(t.type) },
             )
@@ -278,7 +278,7 @@ private fun ResourceList(resources: List<ArscResource>, showType: Boolean, onOpe
                         style = MaterialTheme.typography.labelSmall,
                     )
                 },
-                headlineContent = { Text(r.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                content = { Text(r.name, maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 supportingContent = preview?.let { v -> { Text(v.text.ifEmpty { "\"\"" }, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                 leadingContent = preview?.let { v -> colorOf(v)?.let { c -> { Swatch(c) } } },
                 trailingContent = if (r.values.size > 1) ({ Text(pluralStringResource(R.plurals.arsc_configs, r.values.size, r.values.size), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }) else null,
@@ -301,7 +301,7 @@ private fun ValuesSheet(res: ArscResource, onEdit: (ArscValue) -> Unit) {
             items(res.values, key = { it.qualifiers }) { v ->
                 ListItem(
                     overlineContent = { Text(ArscDocument.displayQualifiers(v.qualifiers), color = MaterialTheme.colorScheme.primary) },
-                    headlineContent = {
+                    content = {
                         Text(
                             v.text.ifEmpty { "\"\"" },
                             fontFamily = if (v.valueType == "STRING") FontFamily.Default else FontFamily.Monospace,

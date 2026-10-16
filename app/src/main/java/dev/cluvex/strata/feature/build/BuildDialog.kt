@@ -60,7 +60,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -81,6 +80,7 @@ import dev.cluvex.strata.core.build.BuildRun
 import dev.cluvex.strata.core.build.BuildStep
 import dev.cluvex.strata.core.build.LogLevel
 import dev.cluvex.strata.core.build.StepStatus
+import dev.cluvex.strata.ui.rememberTextClipboard
 import kotlinx.coroutines.delay
 
 const val BUILD_DIALOG_TAG = "build-dialog"
@@ -95,7 +95,7 @@ fun BuildDialog(run: BuildRun, onClose: () -> Unit, autoCloseMillis: Long = 1400
     var showLog by remember { mutableStateOf(true) }
     var copied by remember { mutableStateOf(false) }
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
 
     LaunchedEffect(run.finished) {
         while (!run.finished) {
@@ -192,7 +192,7 @@ fun BuildDialog(run: BuildRun, onClose: () -> Unit, autoCloseMillis: Long = 1400
                 if (run.finished) {
                     Row(Modifier.fillMaxWidth().padding(top = 14.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
                         TextButton(onClick = {
-                            clipboard.setText(AnnotatedString(run.text()))
+                            clipboard.setText(run.text())
                             copied = true
                             touched = true
                         }) {

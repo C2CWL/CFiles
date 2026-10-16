@@ -53,7 +53,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -64,14 +63,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.font.FontFamily
@@ -94,13 +91,15 @@ import dev.cluvex.strata.core.termux.TermuxLanguages
 import dev.cluvex.strata.core.termux.TermuxSession
 import dev.cluvex.strata.core.termux.TermuxUiState
 import dev.cluvex.strata.ui.LocalSettings
+import dev.cluvex.strata.ui.rememberSheetState
+import dev.cluvex.strata.ui.rememberTextClipboard
 import java.io.File
 import kotlinx.coroutines.launch
 
 @Composable
 fun TermuxSetupStep(state: TermuxUiState, session: TermuxSession) {
     val context = LocalContext.current
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     var settingsNeeded by remember { mutableStateOf(false) }
     val askPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         val activity = context.findActivity()
@@ -146,11 +145,11 @@ fun TermuxSetupStep(state: TermuxUiState, session: TermuxSession) {
                     )
                 }
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilledTonalButton(onClick = { clipboard.setText(AnnotatedString(TermuxApi.ENABLE_EXTERNAL_APPS)) }) {
+                    FilledTonalButton(onClick = { clipboard.setText(TermuxApi.ENABLE_EXTERNAL_APPS) }) {
                         Icon(Icons.Rounded.ContentCopy, contentDescription = null, modifier = Modifier.size(18.dp))
                         Text(stringResource(R.string.common_copy), Modifier.padding(start = 6.dp))
                     }
-                    Button(onClick = { clipboard.setText(AnnotatedString(TermuxApi.ENABLE_EXTERNAL_APPS)); TermuxBridge.launch(context) }) { Text(stringResource(R.string.termux_copy_open)) }
+                    Button(onClick = { clipboard.setText(TermuxApi.ENABLE_EXTERNAL_APPS); TermuxBridge.launch(context) }) { Text(stringResource(R.string.termux_copy_open)) }
                     TextButton(onClick = { session.clearIssue(); session.refresh() }) { Text(stringResource(R.string.termux_done_it)) }
                 }
             }
@@ -182,7 +181,7 @@ private fun StepCard(title: String, body: String, actions: @Composable () -> Uni
 @Composable
 fun RunOutputPanel(state: TermuxUiState, target: String, onStop: () -> Unit) {
     val output = state.outputFor(target)
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     when {
         state.runningFor(target) -> Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             LoadingIndicator(Modifier.size(32.dp))
@@ -204,7 +203,7 @@ fun RunOutputPanel(state: TermuxUiState, target: String, onStop: () -> Unit) {
                         color = if (ok) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
                         modifier = Modifier.weight(1f),
                     )
-                    TextButton(onClick = { clipboard.setText(AnnotatedString(out.stdout + out.stderr)) }) { Text(stringResource(R.string.common_copy)) }
+                    TextButton(onClick = { clipboard.setText(out.stdout + out.stderr) }) { Text(stringResource(R.string.common_copy)) }
                 }
                 SelectionContainer {
                     Column(
@@ -288,7 +287,7 @@ private fun RunSheetFrame(
         session.refresh()
         onPauseOrDispose { }
     }
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberSheetState()) {
         Column(
             Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp).padding(bottom = 20.dp)
                 .verticalScroll(rememberScrollState()),

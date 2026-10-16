@@ -335,7 +335,7 @@ private fun ConnectionsList(
             var menu by remember { mutableStateOf(false) }
             ListItem(
                 leadingContent = { Icon(Icons.Rounded.Cloud, null, tint = MaterialTheme.colorScheme.primary) },
-                headlineContent = { Text(c.name.ifBlank { c.host }) },
+                content = { Text(c.name.ifBlank { c.host }) },
                 supportingContent = { Text(c.displayAddress, fontFamily = FontFamily.Monospace, style = MaterialTheme.typography.labelMedium) },
                 trailingContent = {
                     Box {
@@ -381,7 +381,7 @@ private fun Browser(
                         leadingContent = {
                             Icon(if (e.isDirectory) Icons.Rounded.Folder else Icons.Rounded.Description, null, tint = if (e.isDirectory) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
                         },
-                        headlineContent = { Text(isolated(e.name), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+                        content = { Text(isolated(e.name), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                         supportingContent = if (e.isDirectory) null else ({ Text(Formatters.size(e.size), style = MaterialTheme.typography.labelMedium) }),
                         trailingContent = {
                             Box {

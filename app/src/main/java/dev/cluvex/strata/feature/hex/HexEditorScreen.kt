@@ -64,7 +64,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -91,6 +90,7 @@ import dev.cluvex.strata.core.util.Formatters
 import dev.cluvex.strata.ui.expressive.ArtTone
 import dev.cluvex.strata.ui.expressive.ExpressiveDialog
 import dev.cluvex.strata.ui.expressive.HeroShapes
+import dev.cluvex.strata.ui.rememberTextClipboard
 
 private sealed interface HexDialog {
     data object None : HexDialog
@@ -116,7 +116,7 @@ fun HexEditorScreen(
     LaunchedEffect(path) { vm.open(path, rootEnabled) }
     val ui by vm.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     val listState = rememberLazyListState()
     var menuOpen by remember { mutableStateOf(false) }
     var searchOpen by remember { mutableStateOf(false) }
@@ -302,7 +302,7 @@ fun HexEditorScreen(
             options = CopyFormat.entries.map { stringResource(it.label) },
             onPick = { i ->
                 dialog = HexDialog.None
-                vm.copyAs(CopyFormat.entries[i]) { text -> clipboard.setText(AnnotatedString(text)) }
+                vm.copyAs(CopyFormat.entries[i]) { text -> clipboard.setText(text) }
             },
             onDismiss = { dialog = HexDialog.None },
         )
@@ -311,7 +311,7 @@ fun HexEditorScreen(
             options = PasteFormat.entries.map { stringResource(it.label) },
             onPick = { i ->
                 dialog = HexDialog.None
-                vm.pasteFrom(clipboard.getText()?.text.orEmpty(), PasteFormat.entries[i])
+                clipboard.readText { vm.pasteFrom(it, PasteFormat.entries[i]) }
             },
             onDismiss = { dialog = HexDialog.None },
         )

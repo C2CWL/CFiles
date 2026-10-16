@@ -67,7 +67,6 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -79,7 +78,6 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.setProgress
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextDirection
@@ -90,10 +88,13 @@ import dev.cluvex.strata.R
 import dev.cluvex.strata.core.color.ColorCodec
 import dev.cluvex.strata.core.data.SettingsRepository
 import dev.cluvex.strata.core.i18n.tr
+import dev.cluvex.strata.ui.rememberTextClipboard
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
+import kotlinx.coroutines.withContext
 
 @Stable
 class ColorPickerState(initial: Int) {
@@ -372,7 +373,7 @@ fun ColorPickerDialog(
                     TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_cancel)) }
                     TextButton(onClick = {
                         val c = state.argb
-                        scope.launch(NonCancellable) { repo.pushRecentColor(c) }
+                        scope.launch(start = CoroutineStart.UNDISPATCHED) { withContext(NonCancellable) { repo.pushRecentColor(c) } }
                         onPick(c)
                     }) { Text(stringResource(R.string.common_apply)) }
                 }
@@ -388,7 +389,7 @@ fun ColorPickerScreen(onBack: () -> Unit) {
     val repo = remember { SettingsRepository(context.applicationContext) }
     val recent by repo.recentColors.collectAsStateWithLifecycle(emptyList())
     val scope = rememberCoroutineScope()
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     val state = rememberColorPickerState(0xFF6750A4.toInt())
     var copied by remember { mutableStateOf<ColorCodec.Format?>(null) }
     LaunchedEffect(copied) {
@@ -419,7 +420,7 @@ fun ColorPickerScreen(onBack: () -> Unit) {
             for (format in ColorCodec.Format.entries) {
                 val text = ColorCodec.format(state.argb, format)
                 ListItem(
-                    headlineContent = { Text(text, fontFamily = FontFamily.Monospace) },
+                    content = { Text(text, fontFamily = FontFamily.Monospace) },
                     supportingContent = { Text(format.label) },
                     trailingContent = {
                         if (copied == format) {
@@ -441,7 +442,7 @@ fun ColorPickerScreen(onBack: () -> Unit) {
                         .clip(RoundedCornerShape(16.dp))
                         .background(MaterialTheme.colorScheme.surfaceContainerLow)
                         .clickable {
-                            clipboard.setText(AnnotatedString(text))
+                            clipboard.setText(text)
                             val c = state.argb
                             scope.launch { repo.pushRecentColor(c) }
                             copied = format

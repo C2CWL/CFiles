@@ -25,7 +25,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +46,7 @@ import dev.cluvex.strata.R
 import dev.cluvex.strata.core.termux.ProjectTemplate
 import dev.cluvex.strata.core.termux.TermuxProjects
 import dev.cluvex.strata.core.termux.TermuxSession
+import dev.cluvex.strata.ui.rememberSheetState
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -68,7 +68,7 @@ fun NewProjectSheet(parentDir: String, session: TermuxSession, onCreated: (Strin
     }
     DisposableEffect(Unit) { onDispose { session.clearCreateError() } }
 
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberSheetState()) {
         Column(
             Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 20.dp).padding(bottom = 20.dp)
                 .verticalScroll(rememberScrollState()).testTag("new_project"),
@@ -88,7 +88,7 @@ fun NewProjectSheet(parentDir: String, session: TermuxSession, onCreated: (Strin
                     for (t in TermuxProjects.templates) {
                         val installed = state.isInstalled(t.language)
                         ListItem(
-                            headlineContent = { Text(t.title) },
+                            content = { Text(t.title) },
                             supportingContent = { Text(t.command, fontFamily = FontFamily.Monospace, style = MaterialTheme.typography.bodySmall.copy(textDirection = TextDirection.Ltr)) },
                             leadingContent = {
                                 RadioButton(selected = selected == t, onClick = null, enabled = installed == true)

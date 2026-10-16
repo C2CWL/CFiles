@@ -101,7 +101,7 @@ fun LanguagesScreen(onBack: () -> Unit, vm: TermuxViewModel = viewModel()) {
             items(TermuxLanguages.all, key = { it.id }) { language ->
                 val installed = state.isInstalled(language)
                 ListItem(
-                    headlineContent = { Text(language.displayName) },
+                    content = { Text(language.displayName) },
                     supportingContent = {
                         val version = state.installed?.get(language.id)?.takeIf { it.isNotBlank() }
                         val notInstalled = stringResource(R.string.termux_not_installed_short)

@@ -48,7 +48,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -78,6 +77,7 @@ import dev.cluvex.strata.core.open.OpenTarget
 import dev.cluvex.strata.core.open.Opener
 import dev.cluvex.strata.core.util.FileKinds
 import dev.cluvex.strata.core.util.IntentUtils
+import dev.cluvex.strata.ui.rememberSheetState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -139,7 +139,7 @@ fun OpenWithDialog(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = rememberSheetState(),
         modifier = Modifier.testTag("open-with"),
     ) {
         Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 28.dp)) {

@@ -21,7 +21,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -64,6 +63,7 @@ import androidx.media3.ui.compose.material3.indicator.ProgressSlider
 import dev.cluvex.strata.R
 import dev.cluvex.strata.core.media.MediaSiblings
 import dev.cluvex.strata.core.util.FileKind
+import dev.cluvex.strata.ui.rememberSheetState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -117,7 +117,7 @@ fun MusicPlayerSheet(path: String, showHidden: Boolean, onDismiss: () -> Unit) {
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        sheetState = rememberSheetState(),
         modifier = Modifier.testTag("music-player"),
     ) {
         Column(

@@ -99,7 +99,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
@@ -108,7 +107,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -131,6 +129,7 @@ import dev.cluvex.strata.core.pdf.view.ReadingSpot
 import dev.cluvex.strata.core.pdf.view.SearchOptions
 import dev.cluvex.strata.core.pdf.view.Viewport
 import dev.cluvex.strata.ui.LocalSettings
+import dev.cluvex.strata.ui.rememberTextClipboard
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -205,7 +204,7 @@ private fun ReaderContent(
     val context = LocalContext.current
     val density = LocalDensity.current
     val view = LocalView.current
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     val scope = rememberCoroutineScope()
     val settings = LocalSettings.current
     val prefs = settings.reader
@@ -477,7 +476,7 @@ private fun ReaderContent(
             ) {
                 Row(Modifier.padding(horizontal = 4.dp)) {
                     IconButton(onClick = {
-                        clipboard.setText(AnnotatedString(selected))
+                        clipboard.setText(selected)
                         selection = null
                         scope.launch { snackbar.showSnackbar(tr(R.string.common_copied)) }
                     }, modifier = Modifier.testTag("pdf_copy")) { Icon(Icons.Rounded.ContentCopy, contentDescription = stringResource(R.string.common_copy)) }
@@ -695,7 +694,7 @@ private fun ReaderContent(
                 if (!ReaderActions.safeLink(uri) || !ReaderActions.openLink(context, uri)) scope.launch { snackbar.showSnackbar(tr(R.string.pdf_no_app_for_link)) }
             },
             onCopy = {
-                clipboard.setText(AnnotatedString(uri))
+                clipboard.setText(uri)
                 link = null
             },
             onDismiss = { link = null },

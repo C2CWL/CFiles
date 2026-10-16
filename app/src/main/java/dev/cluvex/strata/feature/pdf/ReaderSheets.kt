@@ -45,7 +45,6 @@ import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -87,6 +86,7 @@ import dev.cluvex.strata.core.pdf.view.PdfMeta
 import dev.cluvex.strata.core.pdf.view.SearchHit
 import dev.cluvex.strata.core.pdf.view.Snippet
 import dev.cluvex.strata.ui.asPath
+import dev.cluvex.strata.ui.rememberSheetState
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -268,7 +268,7 @@ fun ContentsSheet(
     onToggleMark: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheet = rememberSheetState()
     var tab by remember { mutableIntStateOf(if (doc.outline.isEmpty()) 1 else 0) }
     val version by images.version.collectAsState()
     DisposableEffect(Unit) { onDispose { images.wantThumbs(emptyList()) } }
@@ -405,7 +405,7 @@ fun SearchResultsSheet(
     onSelect: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val sheet = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    val sheet = rememberSheetState(skipPartiallyExpanded = false)
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheet) {
         Column(Modifier.fillMaxWidth()) {
             Text(

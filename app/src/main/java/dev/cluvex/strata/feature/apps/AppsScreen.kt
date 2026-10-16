@@ -60,12 +60,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -77,6 +75,7 @@ import dev.cluvex.strata.core.apk.AppIntents
 import dev.cluvex.strata.core.apk.InstalledApp
 import dev.cluvex.strata.core.util.Formatters
 import dev.cluvex.strata.feature.explorer.components.TaskOverlay
+import dev.cluvex.strata.ui.rememberTextClipboard
 import java.io.File
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.rememberScrollState
@@ -381,7 +380,7 @@ private fun AppSheet(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     val bitmap by produceState<ImageBitmap?>(null, app.packageName) { value = icon(app.packageName)?.asImageBitmap() }
     ModalBottomSheet(onDismissRequest = onDismiss, modifier = Modifier.testTag("app-sheet")) {
         Column(Modifier.padding(bottom = 24.dp)) {
@@ -400,7 +399,7 @@ private fun AppSheet(
             SheetAction(stringResource(R.string.apps_app_info_system)) { onDismiss(); AppIntents.details(context, app.packageName) }
             SheetAction(stringResource(R.string.apps_show_in_files), onClick = onLocate)
             if (app.dataDir != null) SheetAction(stringResource(R.string.apps_open_data_folder), onClick = onDataFolder)
-            SheetAction(stringResource(R.string.apps_copy_package)) { clipboard.setText(AnnotatedString(app.packageName)); onDismiss() }
+            SheetAction(stringResource(R.string.apps_copy_package)) { clipboard.setText(app.packageName); onDismiss() }
             if (!app.system) SheetAction(stringResource(R.string.common_uninstall), destructive = true) { onDismiss(); AppIntents.uninstall(context, app.packageName) }
         }
     }

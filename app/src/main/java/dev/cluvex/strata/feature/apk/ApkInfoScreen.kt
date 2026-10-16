@@ -39,10 +39,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,6 +53,7 @@ import dev.cluvex.strata.core.apk.ApkManifestReader
 import dev.cluvex.strata.core.apk.ApkSignature
 import dev.cluvex.strata.core.apk.ApkSignatureInspector
 import dev.cluvex.strata.core.util.Formatters
+import dev.cluvex.strata.ui.rememberTextClipboard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -212,13 +211,13 @@ private fun InfoRow(key: String, value: String) {
 
 @Composable
 private fun Fingerprint(label: String, value: String) {
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
     Row(Modifier.fillMaxWidth().padding(top = 6.dp), verticalAlignment = Alignment.CenterVertically) {
         Column(Modifier.weight(1f)) {
             Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(value, style = MaterialTheme.typography.bodySmall, fontFamily = FontFamily.Monospace)
         }
-        IconButton(onClick = { clipboard.setText(AnnotatedString(value)) }) {
+        IconButton(onClick = { clipboard.setText(value) }) {
             Icon(Icons.Rounded.ContentCopy, contentDescription = stringResource(R.string.apk_copy_named, label))
         }
     }

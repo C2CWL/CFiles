@@ -235,7 +235,7 @@ private fun TrashRow(
                 )
             }
         },
-        headlineContent = { Text(isolated(entry.name), maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        content = { Text(isolated(entry.name), maxLines = 1, overflow = TextOverflow.Ellipsis) },
         supportingContent = {
             Text(
                 entry.originalParent + "\n" + stringResource(R.string.trash_deleted_at, Formatters.date(entry.info.deletedAt), Formatters.size(entry.info.size)),

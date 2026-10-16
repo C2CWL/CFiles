@@ -136,7 +136,7 @@ fun SigningKeysScreen(
                 }
                 items(s.keys, key = { it.id }) { k ->
                     ListItem(
-                        headlineContent = { Text(k.name) },
+                        content = { Text(k.name) },
                         supportingContent = {
                             Text(
                                 "${commonName(k.certificate)} · ${keyDescription(k.certificate)} · " +

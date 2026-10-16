@@ -64,7 +64,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -120,6 +119,7 @@ import dev.cluvex.strata.feature.build.BuildDialog
 import dev.cluvex.strata.ui.expressive.ArtTone
 import dev.cluvex.strata.ui.expressive.ExpressiveDialog
 import dev.cluvex.strata.ui.expressive.HeroShapes
+import dev.cluvex.strata.ui.rememberSheetState
 import io.github.rosemoe.sora.event.ClickEvent
 import io.github.rosemoe.sora.event.EditorMotionEvent
 import io.github.rosemoe.sora.lang.EmptyLanguage
@@ -594,7 +594,7 @@ private fun ClassPage(s: DexUiState, vm: DexViewModel, snackbar: SnackbarHostSta
 private fun MembersSheet(members: List<ClassMember>, onDismiss: () -> Unit, onPick: (ClassMember) -> Unit) {
     var filter by remember { mutableStateOf("") }
     val shown = remember(members, filter) { if (filter.isBlank()) members else members.filter { it.label.contains(filter.trim(), ignoreCase = true) } }
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)) {
+    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = rememberSheetState()) {
         Column(Modifier.fillMaxWidth().testTag("dex-members")) {
             Text(
                 pluralStringResource(R.plurals.dex_member_count, members.size, members.size),

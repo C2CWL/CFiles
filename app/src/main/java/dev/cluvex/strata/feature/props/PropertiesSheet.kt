@@ -39,10 +39,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
@@ -58,6 +56,7 @@ import dev.cluvex.strata.core.util.DateTimeText
 import dev.cluvex.strata.core.util.Formatters
 import dev.cluvex.strata.ui.asPath
 import dev.cluvex.strata.ui.isolated
+import dev.cluvex.strata.ui.rememberTextClipboard
 import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,7 +73,7 @@ fun PropertiesSheet(
     var showPermissions by remember { mutableStateOf(false) }
     var showTime by remember { mutableStateOf(false) }
     var showOwner by remember { mutableStateOf(false) }
-    val clipboard = LocalClipboardManager.current
+    val clipboard = rememberTextClipboard()
 
     LaunchedEffect(ui.changes) { if (ui.changes > 0) onChanged() }
 
@@ -163,7 +162,7 @@ fun PropertiesSheet(
                     }
                 }
                 FilledTonalButton(onClick = {
-                    clipboard.setText(AnnotatedString(ui.items.joinToString("\n") { it.path }))
+                    clipboard.setText(ui.items.joinToString("\n") { it.path })
                     vm.notify(if (ui.items.size == 1) tr(R.string.props_path_copied) else trPlural(R.plurals.props_paths_copied, ui.items.size, ui.items.size))
                 }) {
                     Icon(Icons.Rounded.ContentCopy, null, Modifier.size(18.dp))
