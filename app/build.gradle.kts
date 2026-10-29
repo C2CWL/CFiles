@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dev.cluvex.strata"
+        applicationId = "io.github.c2cwl.cfiles"
         minSdk = 24
         targetSdk = 36
         versionCode = (project.property("strata.versionCode") as String).toInt()
@@ -57,7 +57,7 @@ android {
             signingConfig = if (hasReleaseKeystore) {
                 signingConfigs.getByName("release")
             } else {
-                signingConfigs.getByName("debug")
+                null // Release artifacts are signed on the private relay, never with the debug key.
             }
         }
         create("minified") {

@@ -678,7 +678,7 @@ fun ExplorerScreen(
 @Composable
 private fun ExplorerTitle(pane: PaneState, visible: List<FileItem>) {
     Column {
-        Text("Strata", maxLines = 1)
+        Text(stringResource(R.string.app_name), maxLines = 1)
         Text(
             countsLine(visible),
             style = MaterialTheme.typography.labelMedium,

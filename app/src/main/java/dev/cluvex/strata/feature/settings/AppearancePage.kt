@@ -1,5 +1,8 @@
 package dev.cluvex.strata.feature.settings
 
+import android.content.ComponentName
+import android.content.pm.PackageManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -84,6 +87,7 @@ fun AppearancePage(settings: StrataSettings, act: SettingsActions, onBack: () ->
     var customColor by remember { mutableStateOf(false) }
     SettingsPageScaffold(stringResource(R.string.settings_page_appearance), onBack, subtitle = stringResource(R.string.settings_appearance_subtitle)) {
         ThemePreview(settings)
+        LauncherIconSetting()
         SettingsGroup(stringResource(R.string.settings_group_theme)) {
             choice(tr(R.string.settings_mode), ThemeMode.entries, a.themeMode, { tr(it.label) }, { m -> act.appearance { it.copy(themeMode = m) } }, icon = Icons.Rounded.DarkMode)
             switch(
@@ -361,5 +365,39 @@ fun ThemePreview(settings: StrataSettings) {
                 Switch(checked = true, onCheckedChange = null)
             }
         }
+    }
+}
+
+@Composable
+private fun LauncherIconSetting() {
+    val context = LocalContext.current
+    val pm = context.packageManager
+    val icons = remember(context) {
+        listOf("Default", "Minimal", "Dark").map {
+            ComponentName(context.packageName, "${context.packageName}.launcher.$it")
+        }
+    }
+    var selected by remember(context) {
+        mutableStateOf(icons.indexOfFirst {
+            pm.getComponentEnabledSetting(it) == PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        }.coerceAtLeast(0))
+    }
+    val labels = listOf(R.string.launcher_icon_default, R.string.launcher_icon_minimal, R.string.launcher_icon_dark).map { stringResource(it) }
+    SettingsGroup(stringResource(R.string.launcher_icon_title)) {
+        choice(
+            title = tr(R.string.launcher_icon_title),
+            options = icons.indices.toList(),
+            selected = selected,
+            label = { labels[it] },
+            summary = tr(R.string.launcher_icon_summary),
+            onSelect = { index ->
+                // Enable the new entry before disabling the old one, keeping a launchable entry.
+                pm.setComponentEnabledSetting(icons[index], PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP)
+                icons.filterIndexed { i, _ -> i != index }.forEach {
+                    pm.setComponentEnabledSetting(it, PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP)
+                }
+                selected = index
+            },
+        )
     }
 }

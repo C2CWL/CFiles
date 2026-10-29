@@ -1,5 +1,6 @@
 package dev.cluvex.strata.feature.settings
 
+import androidx.compose.ui.platform.LocalUriHandler
 import android.os.Build
 import android.os.Environment
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.rounded.AutoDelete
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.CreateNewFolder
 import androidx.compose.material.icons.rounded.DataObject
 import androidx.compose.material.icons.rounded.Delete
@@ -622,19 +624,25 @@ private fun components(): List<Pair<String, String>> = listOf(
 
 @Composable
 fun AboutPage(onBack: () -> Unit) {
+    val uriHandler = LocalUriHandler.current
     val context = LocalContext.current
     val icon = remember { runCatching { context.packageManager.getApplicationIcon(context.packageName).toBitmap(192, 192).asImageBitmap() }.getOrNull() }
     SettingsPageScaffold(stringResource(R.string.settings_page_about), onBack) {
         Row(Modifier.fillMaxWidth().padding(top = 16.dp, start = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             if (icon != null) Image(icon, contentDescription = null, modifier = Modifier.size(64.dp))
             Column(Modifier.padding(start = 16.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text("Strata", style = MaterialTheme.typography.headlineSmall)
+                Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmall)
                 Text(
                     stringResource(R.string.settings_about_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.testTag("about-version"),
                 )
                 Text(stringResource(R.string.settings_about_tagline), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        SettingsGroup(stringResource(R.string.settings_support_title)) {
+            link("C2CWL/CFiles", summary = "https://github.com/C2CWL/CFiles", icon = Icons.Rounded.Code) {
+                uriHandler.openUri("https://github.com/C2CWL/CFiles")
             }
         }
         SettingsGroup(stringResource(R.string.settings_group_license)) {

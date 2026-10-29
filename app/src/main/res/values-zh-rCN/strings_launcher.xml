@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="launcher_icon_title">应用图标</string>
+    <string name="launcher_icon_summary">选择内置图标。桌面刷新可能稍有延迟，主题图标由桌面设置控制。</string>
+    <string name="launcher_icon_default">默认</string>
+    <string name="launcher_icon_minimal">极简</string>
+    <string name="launcher_icon_dark">深色</string>
+</resources>
