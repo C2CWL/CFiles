@@ -57,7 +57,7 @@ android {
             signingConfig = if (hasReleaseKeystore) {
                 signingConfigs.getByName("release")
             } else {
-                signingConfigs.getByName("debug")
+                null // Release artifacts are signed on the private relay, never with the debug key.
             }
         }
         create("minified") {
