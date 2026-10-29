@@ -273,7 +273,7 @@ private fun Brand(reduced: Boolean, modifier: Modifier) {
     Row(modifier.fillMaxWidth().padding(start = 4.dp), verticalAlignment = Alignment.CenterVertically) {
         StrataMark(reduced, Modifier.size(40.dp))
         Column(Modifier.padding(start = 12.dp)) {
-            Text("Strata", style = MaterialTheme.typography.headlineSmallEmphasized, color = colors.onSurface)
+            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineSmallEmphasized, color = colors.onSurface)
             Text(stringResource(R.string.drawer_tagline), style = MaterialTheme.typography.labelMedium, color = colors.onSurfaceVariant)
         }
     }
