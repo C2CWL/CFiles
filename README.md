@@ -1,3 +1,17 @@
+# CFiles
+
+Personal Android file manager by C2CWL, derived from [CluvexStudio/Strata](https://github.com/CluvexStudio/Strata).
+
+- App ID: `io.github.c2cwl.cfiles` (debug builds add `.debug`).
+- Green folder / C launcher icon, with Default, Minimal and Dark variants under Settings → Appearance.
+- Adaptive icons and Android 13+ themed icons; launcher support and refresh timing vary.
+- Android 7.x has vector fallback icons. Arbitrary image import is not implemented.
+- Internal Kotlin namespace and native JNI names remain upstream-compatible.
+
+Original copyright notices and AGPL-3.0-or-later license are preserved. Upstream features and build instructions follow.
+
+---
+
 <p align="center">
   <img src=".github/assets/poster.png" alt="Strata, the free, open-source file manager for Android" width="100%">
 </p>

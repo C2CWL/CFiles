@@ -21,7 +21,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "dev.cluvex.strata"
+        applicationId = "io.github.c2cwl.cfiles"
         minSdk = 24
         targetSdk = 36
         versionCode = (project.property("strata.versionCode") as String).toInt()

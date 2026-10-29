@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="launcher_icon_title">App icon</string>
+    <string name="launcher_icon_summary">Choose a built-in icon. Your launcher may take a moment to refresh. Themed icons follow your launcher settings.</string>
+    <string name="launcher_icon_default">Default</string>
+    <string name="launcher_icon_minimal">Minimal</string>
+    <string name="launcher_icon_dark">Dark</string>
+</resources>
