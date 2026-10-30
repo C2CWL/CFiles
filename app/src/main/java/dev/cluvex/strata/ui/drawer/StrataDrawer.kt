@@ -13,8 +13,6 @@ import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.EaseOutBack
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -148,27 +146,6 @@ fun StrataDrawerContent(
     actions: DrawerActions,
 ) {
     val reduced = LocalAppearance.current.motion == MotionStyle.REDUCED
-    val entrance = remember { Animatable(if (reduced) 1f else 0f) }
-    LaunchedEffect(open, closed, reduced) {
-        when {
-            reduced -> entrance.snapTo(1f)
-            open -> entrance.animateTo(1f, tween(900, easing = LinearEasing))
-            closed -> entrance.snapTo(0f)
-        }
-    }
-    var section = 0
-    fun Modifier.stagger(): Modifier {
-        val index = section++
-        return graphicsLayer {
-            val local = ((entrance.value - index * 0.04f) / 0.4f).coerceIn(0f, 1f)
-            val eased = EaseOutBack.transform(local)
-            alpha = local
-            translationY = (1f - eased) * 28.dp.toPx()
-            val s = 0.94f + 0.06f * eased
-            scaleX = s
-            scaleY = s
-        }
-    }
 
     Column(
         Modifier
@@ -177,10 +154,10 @@ fun StrataDrawerContent(
             .padding(top = 18.dp, bottom = 20.dp)
             .testTag("strata-drawer"),
     ) {
-        Brand(reduced, Modifier.stagger())
-        StorageStrata(root, !closed, reduced, Modifier.stagger().padding(top = 16.dp)) { actions.onShortcut(root) }
+        Brand(reduced, Modifier)
+        StorageStrata(root, !closed, reduced, Modifier.padding(top = 16.dp)) { actions.onShortcut(root) }
 
-        SectionTitle(stringResource(R.string.drawer_places), Modifier.stagger())
+        SectionTitle(stringResource(R.string.drawer_places), Modifier)
         val places = remember(root) {
             listOf(
                 Place(R.string.drawer_downloads, Icons.Rounded.Download, "$root/Download", MaterialShapes.Arrow),
@@ -193,7 +170,7 @@ fun StrataDrawerContent(
         }
         val palette = rememberPlacePalette(places.size)
         places.chunked(3).forEachIndexed { row, three ->
-            Row(Modifier.fillMaxWidth().stagger().padding(top = if (row == 0) 0.dp else 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(Modifier.fillMaxWidth().padding(top = if (row == 0) 0.dp else 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 three.forEachIndexed { i, place ->
                     val colors = palette[row * 3 + i]
                     PlaceTile(place, colors.first, colors.second, reduced, Modifier.weight(1f)) { actions.onShortcut(place.folder) }
@@ -202,9 +179,9 @@ fun StrataDrawerContent(
         }
 
         if (bookmarks.isNotEmpty()) {
-            SectionTitle(stringResource(R.string.common_bookmarks), Modifier.stagger())
+            SectionTitle(stringResource(R.string.common_bookmarks), Modifier)
             LazyRow(
-                modifier = Modifier.fillMaxWidth().stagger(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 contentPadding = PaddingValues(end = 8.dp),
             ) {
@@ -212,7 +189,7 @@ fun StrataDrawerContent(
             }
         }
 
-        SectionTitle(stringResource(R.string.drawer_system), Modifier.stagger())
+        SectionTitle(stringResource(R.string.drawer_system), Modifier)
         val rootLabel = stringResource(R.string.drawer_root)
         val dataLabel = stringResource(R.string.drawer_data)
         val systemLabel = stringResource(R.string.drawer_system_folder)
@@ -225,10 +202,10 @@ fun StrataDrawerContent(
                 }
             },
             MaterialShapes.Cookie6Sided,
-            Modifier.stagger(),
+            Modifier,
         )
 
-        SectionTitle(stringResource(R.string.remote_title), Modifier.stagger())
+        SectionTitle(stringResource(R.string.remote_title), Modifier)
         val manageLabel = stringResource(R.string.drawer_manage_storages)
         val sharingLabel = stringResource(R.string.drawer_wifi_sharing)
         DrawerGroup(
@@ -238,10 +215,10 @@ fun StrataDrawerContent(
                 add(DrawerLink(sharingLabel, Icons.Rounded.Wifi, actions.onShare))
             },
             MaterialShapes.Clover4Leaf,
-            Modifier.stagger(),
+            Modifier,
         )
 
-        SectionTitle(stringResource(R.string.common_tools), Modifier.stagger())
+        SectionTitle(stringResource(R.string.common_tools), Modifier)
         DrawerGroup(
             listOf(
                 DrawerLink(stringResource(R.string.drawer_languages), Icons.Rounded.Terminal, actions.onLanguages),
@@ -251,13 +228,13 @@ fun StrataDrawerContent(
                 DrawerLink(stringResource(R.string.plugin_title), Icons.Rounded.Extension, actions.onPlugins),
             ),
             MaterialShapes.Cookie9Sided,
-            Modifier.stagger(),
+            Modifier,
         )
 
-        VaultCard(actions.onVault, Modifier.stagger().padding(top = 22.dp))
+        VaultCard(actions.onVault, Modifier.padding(top = 22.dp))
 
         Row(
-            Modifier.fillMaxWidth().stagger().padding(top = 10.dp),
+            Modifier.fillMaxWidth().padding(top = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(ButtonGroupDefaults.ConnectedSpaceBetween),
         ) {
             FooterButton(stringResource(R.string.common_recycle_bin), Icons.Rounded.DeleteSweep, leading = true, modifier = Modifier.weight(1f), onClick = actions.onRecycleBin)
@@ -284,16 +261,16 @@ private fun StrataMark(reduced: Boolean, modifier: Modifier) {
     val colors = MaterialTheme.colorScheme
     val layers = listOf(colors.secondary, colors.tertiary, colors.primary)
     val drift = if (reduced) {
-        0f
+        null
     } else {
         val t = rememberInfiniteTransition()
-        t.animateFloat(0f, 1f, infiniteRepeatable(tween(3200, easing = LinearEasing), RepeatMode.Reverse)).value
+        t.animateFloat(0f, 1f, infiniteRepeatable(tween(3200, easing = LinearEasing), RepeatMode.Reverse))
     }
     Canvas(modifier) {
         val h = size.height / 4.2f
         val gap = (size.height - 3 * h) / 2f
         layers.forEachIndexed { i, c ->
-            val shift = sin((drift + i * 0.33f) * 2f * PI.toFloat()) * size.width * 0.07f
+            val shift = sin(((drift?.value ?: 0f) + i * 0.33f) * 2f * PI.toFloat()) * size.width * 0.07f
             val inset = size.width * (0.16f - i * 0.05f)
             drawRoundRect(
                 color = c,
@@ -346,10 +323,10 @@ private fun StorageStrata(path: String, open: Boolean, reduced: Boolean, modifie
 private fun StrataGauge(fill: Float, reduced: Boolean, modifier: Modifier) {
     val colors = MaterialTheme.colorScheme
     val phase = if (reduced) {
-        0f
+        null
     } else {
         val t = rememberInfiniteTransition()
-        t.animateFloat(0f, (2 * PI).toFloat(), infiniteRepeatable(tween(5200, easing = LinearEasing))).value
+        t.animateFloat(0f, (2 * PI).toFloat(), infiniteRepeatable(tween(5200, easing = LinearEasing)))
     }
     val track = colors.surfaceContainerHighest
     val bands = listOf(colors.secondaryContainer, colors.tertiary, colors.primary)
@@ -357,7 +334,7 @@ private fun StrataGauge(fill: Float, reduced: Boolean, modifier: Modifier) {
         drawRect(track)
         if (fill <= 0.001f) return@Canvas
         scale(if (layoutDirection == LayoutDirection.Rtl) -1f else 1f, 1f) {
-            drawStrata(fill, phase, bands)
+            drawStrata(fill, phase?.value ?: 0f, bands)
         }
     }
 }

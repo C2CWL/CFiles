@@ -165,6 +165,13 @@ fun ExplorerScreen(
     var lastBackPress by remember { mutableLongStateOf(0L) }
     val rootPath = vm.rootPath
     val dual = ui.settings.dualPanePreferred
+    val leftVisible = remember(ui.left.path, ui.left.items, ui.settings.showHidden, ui.settings.sortFor(ui.left.path), ui.query) {
+        visibleItems(ui.left, ui.settings, ui.query)
+    }
+    val rightVisible = remember(ui.right.path, ui.right.items, ui.settings.showHidden, ui.settings.sortFor(ui.right.path), ui.query) {
+        visibleItems(ui.right, ui.settings, ui.query)
+    }
+    val activeVisible = if (ui.active == Pane.LEFT) leftVisible else rightVisible
     val termux = viewModel<TermuxViewModel>().session
     val sshHere = RemoteUri.parse(ui.activePane.path)?.let { (id, dir) ->
         ui.storages.firstOrNull { it.id == id && it.protocol == RemoteProtocol.SFTP }?.let { it to dir }
@@ -221,7 +228,7 @@ fun ExplorerScreen(
         }
     }
 
-    fun visibleOfActive() = visibleItems(ui.activePane, ui.settings, ui.query).map { it.path }
+    fun visibleOfActive() = activeVisible.map { it.path }
 
     val selection = ui.activePane.items.filter { it.path in ui.activePane.selected }
     val single = selection.singleOrNull()
@@ -230,7 +237,7 @@ fun ExplorerScreen(
     }
     val jarFile = single != null && !single.isDirectory && single.extension.equals("jar", ignoreCase = true)
 
-    fun selectionInOrder() = visibleItems(ui.activePane, ui.settings, ui.query).filter { it.path in ui.activePane.selected }
+    fun selectionInOrder() = activeVisible.filter { it.path in ui.activePane.selected }
 
     fun archiveName(items: List<FileItem>, folder: String): String =
         items.singleOrNull()?.let { ArchiveFormat.ZIP.defaultName(it).removeSuffix(ArchiveFormat.ZIP.extension) }
@@ -279,7 +286,7 @@ fun ExplorerScreen(
                     navigationIcon = {
                         IconButton(onClick = onOpenDrawer) { Icon(Icons.Rounded.Menu, contentDescription = stringResource(R.string.explorer_menu)) }
                     },
-                    title = { ExplorerTitle(ui.activePane, visibleItems(ui.activePane, ui.settings, ui.query)) },
+                    title = { ExplorerTitle(ui.activePane, activeVisible) },
                     actions = {
                         IconButton(onClick = { vm.setSearchActive(true) }) { Icon(Icons.Rounded.Search, contentDescription = stringResource(R.string.explorer_filter)) }
                         IconButton(onClick = {
@@ -404,7 +411,7 @@ fun ExplorerScreen(
             val panes = if (dual) listOf(Pane.LEFT, Pane.RIGHT) else listOf(ui.active)
             for (pane in panes) {
                 val state = ui.pane(pane)
-                val visible = remember(state.items, ui.settings, ui.query) { visibleItems(state, ui.settings, ui.query) }
+                val visible = if (pane == Pane.LEFT) leftVisible else rightVisible
                 PaneColumn(
                     state = state,
                     visible = visible,

@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
+import androidx.compose.animation.core.tween
+import dev.cluvex.strata.core.model.MotionStyle
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -48,10 +48,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import dev.cluvex.strata.BuildConfig
 import dev.cluvex.strata.R
@@ -214,15 +212,14 @@ fun SettingsScreen(
     val act = remember(repo) { SettingsActions(scope, repo) }
     var page by rememberSaveable { mutableStateOf(startPage) }
     val direct = startPage != null
-    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val transitionDuration = if (settings.appearance.motion == MotionStyle.REDUCED) 0 else 150
     BackHandler(enabled = page != null && !direct) { page = null }
     AnimatedContent(
         targetState = page,
         transitionSpec = {
-            val forward = targetState != null
-            val sign = if (forward != rtl) 1 else -1
-            (slideInHorizontally { w -> sign * w / 4 } + fadeIn())
-                .togetherWith(slideOutHorizontally { w -> -sign * w / 4 } + fadeOut())
+            fadeIn(tween(transitionDuration))
+                .togetherWith(fadeOut(tween(transitionDuration)))
+                .using(null)
         },
     ) { current ->
         val back = if (direct) onBack else { { page = null } }
