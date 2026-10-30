@@ -260,7 +260,6 @@ private fun FolderList(
         FolderGrid(folder, selected, scrollMemory, refreshing, onRefresh, onUp, onOpen, onToggleSelect, onItemMenu, pane, drag)
         return
     }
-    val motion = MaterialTheme.motionScheme
     val hasParent = folder.path != "/"
     val offset = if (hasParent) 1 else 0
     val saved = scrollMemory[folder.path]
@@ -342,11 +341,7 @@ private fun FolderList(
                 onClick = { if (selecting) onToggleSelect(item) else onOpen(item) },
                 onLongClick = { onItemMenu(item) },
                 onIconClick = { onToggleSelect(item) },
-                modifier = Modifier.animateItem(
-                    fadeInSpec = null,
-                    placementSpec = motion.defaultSpatialSpec(),
-                    fadeOutSpec = null,
-                ),
+                modifier = Modifier,
                 drop = links.look(item),
                 onDragStart = links.start(item),
             )
@@ -370,7 +365,6 @@ private fun FolderGrid(
     pane: Pane,
     drag: FileDragState?,
 ) {
-    val motion = MaterialTheme.motionScheme
     val hasParent = folder.path != "/"
     val offset = if (hasParent) 1 else 0
     val saved = scrollMemory[folder.path]
@@ -443,11 +437,7 @@ private fun FolderGrid(
                     onClick = { if (selecting) onToggleSelect(item) else onOpen(item) },
                     onLongClick = { onItemMenu(item) },
                     onIconClick = { onToggleSelect(item) },
-                    modifier = Modifier.animateItem(
-                        fadeInSpec = null,
-                        placementSpec = motion.defaultSpatialSpec(),
-                        fadeOutSpec = null,
-                    ),
+                    modifier = Modifier,
                     drop = links.look(item),
                     onDragStart = links.start(item),
                 )
