@@ -248,9 +248,6 @@ fun LanguagePage(settings: StrataSettings, act: SettingsActions, onBack: () -> U
     val activity = LocalActivity.current
     val current = remember { AppLocales.current(context) }
     val system = remember { Resources.getSystem().configuration.locales[0] }
-    val sample = remember {
-        Formatters.listDate(System.currentTimeMillis(), DateStyle.LONG, true, locale = Locale.forLanguageTag("fa"), solarHijri = true)
-    }
     val options = listOf(AppLanguage.SYSTEM) + AppLanguage.choices
     SettingsPageScaffold(stringResource(R.string.language_title), onBack, subtitle = stringResource(R.string.language_subtitle)) {
         SettingsGroup(tr(R.string.language_group), footer = if (Build.VERSION.SDK_INT >= 33) tr(R.string.language_system_note) else null) {
@@ -260,8 +257,6 @@ fun LanguagePage(settings: StrataSettings, act: SettingsActions, onBack: () -> U
                     val detail = when (language) {
                         AppLanguage.SYSTEM -> system.getDisplayName(system).replaceFirstChar { it.titlecase(system) }
                         AppLanguage.ENGLISH -> stringResource(R.string.language_english)
-                        AppLanguage.PERSIAN -> stringResource(R.string.language_persian)
-                        AppLanguage.RUSSIAN -> stringResource(R.string.language_russian)
                         AppLanguage.CHINESE -> stringResource(R.string.language_chinese)
                     }
                     SegmentedListItem(
@@ -275,15 +270,5 @@ fun LanguagePage(settings: StrataSettings, act: SettingsActions, onBack: () -> U
                 }
             }
         }
-        SettingsGroup(tr(R.string.language_calendar_group)) {
-            switch(
-                tr(R.string.language_persian_calendar),
-                settings.list.persianCalendar,
-                { v -> act.list { it.copy(persianCalendar = v) } },
-                summary = tr(R.string.language_persian_calendar_summary, sample),
-                icon = Icons.Rounded.CalendarMonth,
-            )
-        }
-        Column { SettingNote(stringResource(R.string.language_help)) }
     }
 }

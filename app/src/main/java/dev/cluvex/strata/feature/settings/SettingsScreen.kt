@@ -118,7 +118,6 @@ object SettingsIndex {
     val entries = listOf(
         SettingEntry(R.string.settings_support_title, SettingsPage.SUPPORT, R.string.settings_kw_support),
         SettingEntry(R.string.language_title, SettingsPage.LANGUAGE, R.string.settings_kw_language),
-        SettingEntry(R.string.settings_entry_solar_hijri, SettingsPage.LANGUAGE, R.string.settings_kw_solar_hijri),
         SettingEntry(R.string.settings_entry_theme_mode, SettingsPage.APPEARANCE, R.string.settings_kw_theme_mode),
         SettingEntry(R.string.settings_pure_black, SettingsPage.APPEARANCE, R.string.settings_kw_pure_black),
         SettingEntry(R.string.settings_wallpaper_colors, SettingsPage.APPEARANCE, R.string.settings_kw_wallpaper),

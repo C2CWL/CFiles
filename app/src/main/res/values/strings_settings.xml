@@ -20,7 +20,6 @@
     <string name="settings_search_clear">Clear search</string>
     <string name="settings_search_none">No settings match \"%1$s\"</string>
     <string name="settings_search_results">Results</string>
-    <string name="settings_entry_solar_hijri">Solar Hijri calendar</string>
     <string name="settings_entry_theme_mode">Theme mode</string>
     <string name="settings_entry_view_mode">View as list or grid</string>
     <string name="settings_entry_density">List density</string>
@@ -34,7 +33,6 @@
     <string name="settings_entry_import">Import settings</string>
     <string name="settings_entry_about">Version and licenses</string>
     <string name="settings_kw_language">language persian farsi russian chinese english rtl translation</string>
-    <string name="settings_kw_solar_hijri">persian jalali shamsi date calendar</string>
     <string name="settings_kw_theme_mode">dark light night system</string>
     <string name="settings_kw_pure_black">amoled oled black dark</string>
     <string name="settings_kw_wallpaper">material you dynamic monet</string>
