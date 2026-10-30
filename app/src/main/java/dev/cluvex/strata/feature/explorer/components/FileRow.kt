@@ -104,7 +104,6 @@ fun FileRow(
     val iconSize = density.iconDp.dp
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
-    val scale by animateFloatAsState(if (pressed) 0.96f else 1f, motion.fastSpatialSpec(), label = "press")
     val look = rememberDropAnimation(drop)
     val background by animateColorAsState(
         when {
@@ -115,7 +114,6 @@ fun FileRow(
         motion.defaultEffectsSpec(),
         label = "rowBg",
     )
-    val ghostAlpha by animateFloatAsState(if (drop.ghosted) 0.36f else 1f, motion.defaultEffectsSpec(), label = "rowGhost")
     val flash = rememberFlash(flashKey, flashPulses)
     val flashColor = colors.primary.copy(alpha = 0.32f)
 
@@ -123,11 +121,7 @@ fun FileRow(
         modifier
             .then(drop.spot)
             .fillMaxWidth()
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-                alpha = ghostAlpha
-            }
+            .pressLayer(pressed, drop.ghosted, 0.96f)
             .clip(MaterialTheme.shapes.medium)
             .background(background)
             .drawBehind {
@@ -201,7 +195,6 @@ fun FileTile(
     val list = settings.list
     val interaction = remember { MutableInteractionSource() }
     val pressed by interaction.collectIsPressedAsState()
-    val scale by animateFloatAsState(if (pressed) 0.95f else 1f, motion.fastSpatialSpec(), label = "press")
     val look = rememberDropAnimation(drop)
     val background by animateColorAsState(
         when {
@@ -212,7 +205,6 @@ fun FileTile(
         motion.defaultEffectsSpec(),
         label = "tileBg",
     )
-    val ghostAlpha by animateFloatAsState(if (drop.ghosted) 0.36f else 1f, motion.defaultEffectsSpec(), label = "tileGhost")
     val flash = rememberFlash(flashKey, flashPulses)
     val flashColor = colors.primary.copy(alpha = 0.32f)
     val shape = settings.appearance.iconShape.toShape()
@@ -221,11 +213,7 @@ fun FileTile(
         modifier
             .then(drop.spot)
             .fillMaxWidth()
-            .graphicsLayer {
-                scaleX = scale
-                scaleY = scale
-                alpha = ghostAlpha
-            }
+            .pressLayer(pressed, drop.ghosted, 0.95f)
             .clip(MaterialTheme.shapes.large)
             .background(background)
             .drawBehind {
@@ -309,6 +297,22 @@ private const val FLASH_OUT_MS = 280
 private const val FLASH_FADE_MS = 520
 
 fun flashDurationMs(pulses: Int): Long = (pulses * (FLASH_IN_MS + FLASH_OUT_MS) + FLASH_FADE_MS).toLong()
+
+/**
+ * Rows are the hot path while scrolling: only mount an offscreen layer while the row is actually
+ * pressed or ghosted, otherwise every visible row pays for its own compositing layer.
+ */
+@Composable
+private fun Modifier.pressLayer(pressed: Boolean, ghosted: Boolean, target: Float): Modifier {
+    if (!pressed && !ghosted) return this
+    val scale by animateFloatAsState(if (pressed) target else 1f, label = "rowScale")
+    val alpha by animateFloatAsState(if (ghosted) 0.36f else 1f, label = "rowAlpha")
+    return graphicsLayer {
+        scaleX = scale
+        scaleY = scale
+        this.alpha = alpha
+    }
+}
 
 @Composable
 private fun trailingInfo(item: FileItem, list: ListPrefs): String? = when {
