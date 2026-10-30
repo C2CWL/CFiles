@@ -305,8 +305,8 @@ fun flashDurationMs(pulses: Int): Long = (pulses * (FLASH_IN_MS + FLASH_OUT_MS) 
 @Composable
 private fun Modifier.pressLayer(pressed: Boolean, ghosted: Boolean, target: Float): Modifier {
     if (!pressed && !ghosted) return this
-    val scale by animateFloatAsState(if (pressed) target else 1f, initialValue = 1f, label = "rowScale")
-    val alpha by animateFloatAsState(if (ghosted) 0.36f else 1f, initialValue = 1f, label = "rowAlpha")
+    val scale by animateFloatAsState(if (pressed) target else 1f, label = "rowScale")
+    val alpha by animateFloatAsState(if (ghosted) 0.36f else 1f, label = "rowAlpha")
     return graphicsLayer {
         scaleX = scale
         scaleY = scale
