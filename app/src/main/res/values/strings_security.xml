@@ -89,20 +89,14 @@
     <string name="vault_err_kept_original">%1$s: copied into the vault, but the original couldn\'t be removed</string>
     <string name="vault_err_read">Couldn\'t read %1$s</string>
     <string name="language_title">Language</string>
-    <string name="language_subtitle">CFiles speaks English, Persian, Russian and Chinese</string>
+    <string name="language_subtitle">CFiles speaks English and Chinese (Simplified)</string>
     <string name="language_group">App language</string>
     <string name="language_system">System default</string>
     <string name="language_english">English</string>
-    <string name="language_persian">Persian</string>
-    <string name="language_russian">Russian</string>
     <string name="language_chinese">Chinese (Simplified)</string>
     <string name="language_system_note">This is the same setting as App languages in the phone\'s settings.</string>
     <string name="language_calendar_group">Calendar</string>
-    <string name="language_persian_calendar">Solar Hijri dates in Persian</string>
-    <string name="language_persian_calendar_summary">When CFiles is in Persian, dates read like %1$s</string>
     <string name="language_native_en" translatable="false">English</string>
-    <string name="language_native_fa" translatable="false">فارسی</string>
-    <string name="language_native_ru" translatable="false">Русский</string>
     <string name="language_native_zh" translatable="false">简体中文</string>
     <string name="language_help">Right-to-left languages turn the whole app around: panes, menus and gestures follow the direction you read in. Code, paths and hex always stay left-to-right.</string>
     <plurals name="vault_moved">

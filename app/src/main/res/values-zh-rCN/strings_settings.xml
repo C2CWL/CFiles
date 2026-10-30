@@ -19,7 +19,6 @@
     <string name="settings_search_clear">清除搜索</string>
     <string name="settings_search_none">没有与“%1$s”匹配的设置</string>
     <string name="settings_search_results">结果</string>
-    <string name="settings_entry_solar_hijri">伊朗太阳历</string>
     <string name="settings_entry_theme_mode">主题模式</string>
     <string name="settings_entry_view_mode">列表或网格视图</string>
     <string name="settings_entry_density">列表密度</string>
@@ -33,7 +32,6 @@
     <string name="settings_entry_import">导入设置</string>
     <string name="settings_entry_about">版本和许可</string>
     <string name="settings_kw_language">语言 波斯语 俄语 中文 英语 从右到左 翻译</string>
-    <string name="settings_kw_solar_hijri">波斯 伊朗历 太阳历 日期 日历</string>
     <string name="settings_kw_theme_mode">深色 浅色 夜间 系统 暗色</string>
     <string name="settings_kw_pure_black">纯黑 黑色 深色 省电</string>
     <string name="settings_kw_wallpaper">壁纸 动态取色 莫奈</string>
