@@ -1,43 +1,19 @@
 # CFiles
 
-Personal Android file manager by C2CWL, derived from [CluvexStudio/Strata](https://github.com/CluvexStudio/Strata).
+Android 文件管理器，由 C2CWL 个人自用，按需修改，不提供技术支持。
 
-- App ID: `io.github.c2cwl.cfiles` (debug builds add `.debug`).
-- Green folder / C launcher icon, with Default, Minimal and Dark variants under Settings → Appearance.
-- Adaptive icons and Android 13+ themed icons; launcher support and refresh timing vary.
-- Android 7.x has vector fallback icons. Arbitrary image import is not implemented.
-- Internal Kotlin namespace and native JNI names remain upstream-compatible.
+基于 [CluvexStudio/Strata](https://github.com/CluvexStudio/Strata)，保留其版权声明、第三方许可和 [GNU AGPL v3.0 or later](LICENSE)。
 
-Original copyright notices and AGPL-3.0-or-later license are preserved. Upstream features and build instructions follow.
+## 约定
 
----
+- 安装包 ID：`io.github.c2cwl.cfiles`；调试版追加 `.debug`。
+- 图标：默认、极简、深色三款，可在「设置 → 外观」切换；支持 Android 13+ 主题图标。
+- 最低支持 Android 7.0；Android 7.x 使用矢量回退图标。
+- 内部 Kotlin 命名空间和 JNI 名称沿用上游，方便同步。
 
-<p align="center">
-  <img src=".github/assets/poster.png" alt="Strata, the free, open-source file manager for Android" width="100%">
-</p>
+## 构建
 
-<p align="center">
-  <a href="https://github.com/CluvexStudio/Strata/actions/workflows/build.yml"><img src="https://github.com/CluvexStudio/Strata/actions/workflows/build.yml/badge.svg" alt="Build"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-0F3D2E" alt="License: AGPL-3.0"></a>
-</p>
-
-**Strata** is a free, open-source file manager for Android with the tools power users need: two panes, archives, APK and DEX editing, a code editor, network storages and an encrypted vault. No ads, no accounts, no tracking.
-
-## Features
-
-- **Files**: two panes side by side, drag and drop onto folders, root and Shizuku access, recycle bin, search by name or content, batch rename, bookmarks, permissions, links, split and merge, file encryption
-- **Archives**: open and extract ZIP, 7z, RAR, TAR, GZ, XZ, ZST and more; create ZIP, 7z and TAR archives with passwords
-- **APK tools**: app details, split APK install, signing (v1 to v3) and signing keys, clone with a new name and icon, DEX and smali editor, Java decompiler, manifest and resource editors
-- **Editors and viewers**: code editor with syntax highlighting, hex editor, PDF reader, image viewer, music and video player, font viewer, Markdown preview, 9-patch editor, color picker
-- **Network**: FTP, SFTP, SMB and WebDAV right in the panes, plus Wi-Fi sharing with an FTP server or a file manager in the browser
-- **Code runner**: run and build code in many languages through Termux
-- **Privacy**: an encrypted vault opened with your fingerprint, app lock, and nothing that leaves your phone unless you send it
-- **Languages**: English, Persian (fully right-to-left), Russian and Chinese
-- **Design**: Material 3 Expressive with dynamic colors, light and dark themes
-
-## Building
-
-You need the Android SDK with an NDK, and Rust with the Android targets and `cargo-ndk`. JDK 17 is set up by Gradle.
+需要 Android SDK、NDK，以及安装了 Android 目标的 Rust 和 `cargo-ndk`；JDK 17 由 Gradle 处理。
 
 ```bash
 rustup target add aarch64-linux-android armv7-linux-androideabi x86_64-linux-android
@@ -47,18 +23,11 @@ native/build.sh
 ./gradlew :app:assembleDebug
 ```
 
-## Support the developer
+## 下载
 
-Strata is free and open source. If it saves you time and you'd like to help it grow, you can send a donation to one of these addresses. Every bit of support is appreciated. Thank you!
-
-| Coin and network | Address |
+| ABI | 说明 |
 |---|---|
-| TRX / USDT · Tron (TRC-20) | `TRxVSHcoADZnBfztFmFb2TQopusAwWYEVR` |
-| USDT · BNB Smart Chain (BEP-20) | `0x20c980AEF36Aa71D0A0e7bE382AeD20b73bC6D27` |
-| TON (Gram) | `UQAH75bXaaRUhZMwiF0ZujOXFDDmvLSPASKoOsWF0HNasiaM` |
-
-Send each coin only on the network named next to its address. The same addresses are in the app under **Settings → Support the developer**.
-
-## License
-
-Strata is licensed under the [GNU AGPL v3.0 or later](LICENSE). Third-party components keep their own licenses; they are listed in the app under **Settings → About**.
+| `arm64-v8a` | 多数现代手机 |
+| `armeabi-v7a` | 32 位 ARM 设备 |
+| `x86_64` | 模拟器或 x86 设备 |
+| `universal` | 不确定架构时使用 |
