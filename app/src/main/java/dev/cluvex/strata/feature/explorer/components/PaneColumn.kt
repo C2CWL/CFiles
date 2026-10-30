@@ -4,15 +4,12 @@ import dev.cluvex.strata.ui.asPath
 import dev.cluvex.strata.ui.isolated
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -71,7 +68,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.PointerId
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.clip
@@ -81,7 +77,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import dev.cluvex.strata.R
 import dev.cluvex.strata.core.fs.DropKind
@@ -148,7 +143,6 @@ fun PaneColumn(
     val paneHover = drag?.hover?.key == paneKey
     val paneGlow by animateFloatAsState(if (paneHover) 1f else 0f, motion.defaultSpatialSpec(), label = "paneGlow")
     val glowColor = MaterialTheme.colorScheme.primary
-    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     Box(
         modifier
@@ -198,14 +192,9 @@ fun PaneColumn(
             targetState = page,
             contentKey = { it.path },
             transitionSpec = {
-                val dir = targetState.direction
-                if (dir == NavDirection.FORWARD || dir == NavDirection.BACK) {
-                    val sign = (if (dir == NavDirection.FORWARD) 1 else -1) * (if (rtl) -1 else 1)
-                    (slideInHorizontally(motion.defaultSpatialSpec()) { w -> sign * w / 3 } + fadeIn(motion.defaultEffectsSpec()))
-                        .togetherWith(slideOutHorizontally(motion.defaultSpatialSpec()) { w -> -sign * w / 3 } + fadeOut(motion.fastEffectsSpec()))
-                } else {
-                    fadeIn(motion.defaultEffectsSpec()).togetherWith(fadeOut(motion.fastEffectsSpec()))
-                }.using(SizeTransform(clip = true))
+                fadeIn(motion.fastEffectsSpec())
+                    .togetherWith(fadeOut(motion.fastEffectsSpec()))
+                    .using(null)
             },
             label = "folderPage",
             modifier = Modifier.fillMaxSize().clipToBounds(),
@@ -354,9 +343,9 @@ private fun FolderList(
                 onLongClick = { onItemMenu(item) },
                 onIconClick = { onToggleSelect(item) },
                 modifier = Modifier.animateItem(
-                    fadeInSpec = motion.defaultEffectsSpec(),
+                    fadeInSpec = null,
                     placementSpec = motion.defaultSpatialSpec(),
-                    fadeOutSpec = motion.fastEffectsSpec(),
+                    fadeOutSpec = null,
                 ),
                 drop = links.look(item),
                 onDragStart = links.start(item),
@@ -455,9 +444,9 @@ private fun FolderGrid(
                     onLongClick = { onItemMenu(item) },
                     onIconClick = { onToggleSelect(item) },
                     modifier = Modifier.animateItem(
-                        fadeInSpec = motion.defaultEffectsSpec(),
+                        fadeInSpec = null,
                         placementSpec = motion.defaultSpatialSpec(),
-                        fadeOutSpec = motion.fastEffectsSpec(),
+                        fadeOutSpec = null,
                     ),
                     drop = links.look(item),
                     onDragStart = links.start(item),

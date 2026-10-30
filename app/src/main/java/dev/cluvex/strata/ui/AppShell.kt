@@ -7,8 +7,6 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,9 +58,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import dev.cluvex.strata.R
 import dev.cluvex.strata.core.i18n.tr
@@ -215,7 +211,6 @@ fun AppShell(
     val snackbar = remember { SnackbarHostState() }
     val saveable = rememberSaveableStateHolder()
     val motion = MaterialTheme.motionScheme
-    val side = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
 
     val root = remember { Environment.getExternalStorageDirectory()?.absolutePath ?: "/storage/emulated/0" }
     val sidebarBookmarks by remember(vm) {
@@ -387,14 +382,9 @@ fun AppShell(
                 targetState = stack.top,
                 contentKey = { it?.key },
                 transitionSpec = {
-                    val entering = (targetState?.key ?: -1L) > (initialState?.key ?: -1L)
-                    if (entering) {
-                        (slideInHorizontally(motion.defaultSpatialSpec()) { w -> side * w / 3 } + fadeIn(motion.defaultEffectsSpec()))
-                            .togetherWith(fadeOut(motion.fastEffectsSpec()))
-                    } else {
-                        fadeIn(motion.fastEffectsSpec())
-                            .togetherWith(slideOutHorizontally(motion.defaultSpatialSpec()) { w -> side * w / 3 } + fadeOut(motion.defaultEffectsSpec()))
-                    }
+                    fadeIn(motion.fastEffectsSpec())
+                        .togetherWith(fadeOut(motion.fastEffectsSpec()))
+                        .using(null)
                 },
             ) { entry ->
                 if (entry != null) {
